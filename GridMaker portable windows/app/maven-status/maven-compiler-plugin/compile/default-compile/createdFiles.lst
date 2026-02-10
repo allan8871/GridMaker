@@ -1,0 +1,9 @@
+GUI\Sobre.class
+GUI\PainelDesenho.class
+GUI\passo_a_passo_janela.class
+algoritmos\geradores_de_grade.class
+GUI\JanelaPrincipal.class
+algoritmos\GradeInvalidaException.class
+GUI\PainelPassoAPasso.class
+principal\Main.class
+algoritmos\metodos_auxiliares.class
