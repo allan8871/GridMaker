@@ -1,2 +1,2 @@
 # GridMaker
- Porgrama para dobrar grade em papel quadrado.
+ Programa para dobrar grade em papel quadrado.
