@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import preferencias.Config;
 
 public class PainelPassoAPasso extends JPanel {
 
@@ -60,7 +61,7 @@ public class PainelPassoAPasso extends JPanel {
             flechas_rect.add(arc_rect_limiter);
         }
         } catch (NullPointerException e){
-            JOptionPane.showMessageDialog(this, "Grade não gerada.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Config.bundleMessage.getString("gridNotGenerated"), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -69,28 +70,29 @@ public class PainelPassoAPasso extends JPanel {
         super.paintComponent(g);
         Graphics2D g1 = (Graphics2D) g;
 
-        g1.setStroke(new BasicStroke(2));
+        g1.setStroke(new BasicStroke(Config.squareWidth));
         g1.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        //x = (this.getWidth()-lado)/2;
+        //y = (this.getHeight()-lado)/2;
         g1.drawRect(x, y, lado, lado);
 
         float[] tracejado = {5,5};
-        g1.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, tracejado, 0));
-        //g1.setStroke(new BasicStroke(1));
-        g1.setColor(Color.blue);
+        g1.setStroke(new BasicStroke(Config.creaseStepByStepWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, tracejado, 0));
+        g1.setColor(Config.creaseStepByStepColor);
 
         // desenha apenas até o passo atual
         for (int i = 0; i < passo_atual+1 && i < linhas_passo_a_passo.size(); i++) {
             if (i == linhas_passo_a_passo.size()-1){
-                g1.setColor(Color.green);
+                g1.setColor(Config.creaseStepByStepFInalColor);
             }
             g1.draw(linhas_passo_a_passo.get(i));
             if (i == passo_atual){
-                g1.setColor(Color.gray);
-                g1.setStroke(new BasicStroke(2));
+                g1.setColor(Color.black);
+                g1.setStroke(new BasicStroke(Config.arcStepByStepWidth));
                 g1.draw(new Arc2D.Double(flechas_rect.get(i),-80,160,Arc2D.OPEN));
             }
-            g1.setColor(Color.blue);
+            g1.setColor(Config.creaseStepByStepColor);
         }
     }
 

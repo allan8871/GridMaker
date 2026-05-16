@@ -1,6 +1,7 @@
 package GUI;
 
 import algoritmos.GradeInvalidaException;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,15 +11,29 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import preferencias.Config;
 
 public class JanelaPrincipal extends javax.swing.JFrame {
-    
-    String nomePadrao;
 
     public JanelaPrincipal() {
         initComponents();
         getRootPane().setDefaultButton(jButtonGrade);
         setIconImage(new ImageIcon(getClass().getResource("/icons/GridMakerIcon.png")).getImage());
+        setLanguage();
+    }
+    
+    public void setLanguage() {
+        jMenuArquivo.setText(Config.bundleLanguage.getString("menu.file"));
+        jMenuItemSalvarImagem.setText(Config.bundleLanguage.getString("menu.file.save"));
+        jMenuItemPref.setText(Config.bundleLanguage.getString("menu.file.preferences"));
+        jMenuItemSair.setText(Config.bundleLanguage.getString("menu.file.exit"));
+        jMenuMetodo.setText(Config.bundleLanguage.getString("menu.method"));
+        jRadioButtonMenuItemCrossDiag.setText(Config.bundleLanguage.getString("menu.method.crossDiag"));
+        jMenuAjuda.setText(Config.bundleLanguage.getString("menu.help"));
+        jMenuItemSobre.setText(Config.bundleLanguage.getString("menu.help.about"));
+        jLabel1.setText(Config.bundleLanguage.getString("label"));
+        jButtonGrade.setText(Config.bundleLanguage.getString("button.generateGrid"));
+        jButtonPasso.setText(Config.bundleLanguage.getString("button.step"));
     }
 
     @SuppressWarnings("unchecked")
@@ -35,6 +50,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jMenuBar = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemSalvarImagem = new javax.swing.JMenuItem();
+        jMenuItemPref = new javax.swing.JMenuItem();
         jMenuItemSair = new javax.swing.JMenuItem();
         jMenuMetodo = new javax.swing.JMenu();
         jRadioButtonMenuItemCrossDiag = new javax.swing.JRadioButtonMenuItem();
@@ -87,6 +103,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jMenuItemSalvarImagem.setText("Salvar imagem como...");
         jMenuItemSalvarImagem.addActionListener(this::jMenuItemSalvarImagemActionPerformed);
         jMenuArquivo.add(jMenuItemSalvarImagem);
+
+        jMenuItemPref.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jMenuItemPref.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/config.png"))); // NOI18N
+        jMenuItemPref.setText("Preferências");
+        jMenuItemPref.addActionListener(this::jMenuItemPrefActionPerformed);
+        jMenuArquivo.add(jMenuItemPref);
 
         jMenuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jMenuItemSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sign-out.png"))); // NOI18N
@@ -145,30 +167,24 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jPanelDesenho.zeraMetodos();
         try {
             int n = (int) jSpinnerGrade.getValue();
-            nomePadrao = "Grade " + n + "x" + n;
             jPanelDesenho.setN(n);
             if (jRadioButtonMenuItemCrossDiag.isSelected()){
                 jPanelDesenho.diagonais = true;
-                 nomePadrao += " diagonais";
             }
             if (jRadioButtonMenuItemFujimoto.isSelected()){
                 jPanelDesenho.Fujimoto = true;
-                nomePadrao += " Fujimoto";
             }
             if (jRadioButtonMenuItemHaag.isSelected()){
                 jPanelDesenho.Haag = true;
-                nomePadrao += " Haag";
             }
             if (jRadioButtonMenuItemNoma.isSelected()){
                 jPanelDesenho.Noma = true;
-                nomePadrao += " Noma";
             }
             if (jRadioButtonMenuItemHaga.isSelected()){
                 jPanelDesenho.Haga = true;
-                nomePadrao += " Haga";
             }
         } catch (GradeInvalidaException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), Config.bundleMessage.getString("errorMessageTitle"), JOptionPane.ERROR_MESSAGE);
         } finally {
             repaint();
         }
@@ -194,49 +210,68 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
         // Abre um JFileChooser para escolher onde salvar
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Salvar imagem");
+        fileChooser.setDialogTitle(Config.bundleMessage.getString("fileChooserTitle"));
         try{
-            fileChooser.setSelectedFile(new File(nomePadrao)); // nome padrão
-            // Filtro para PNG e JPEG
+            fileChooser.setSelectedFile(new File(""));
+            // Filtros para PNG e JPEG
             fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG", "png"));
             fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG", "jpg", "jpeg"));
 
             int userSelection = fileChooser.showSaveDialog(this);
             if (userSelection == JFileChooser.APPROVE_OPTION) {
                 File arquivo_para_salvar = fileChooser.getSelectedFile();
-
                 // Descobre extensão escolhida
-                String ext = "png"; // padrão
+                String extensao = "png"; // padrão
                 String nome_do_arquivo = arquivo_para_salvar.getName().toLowerCase();
                 if (nome_do_arquivo.endsWith(".jpg") || nome_do_arquivo.endsWith(".jpeg")) {
-                    ext = "jpg";
+                    extensao = "jpg";
                 } else if (nome_do_arquivo.endsWith(".png")) {
-                    ext = "png";
+                    extensao = "png";
                 } else {
                     // Força extensão padrão
                     arquivo_para_salvar = new File(arquivo_para_salvar.getAbsolutePath() + ".png");
                 }
-
                 try {
-                    ImageIO.write(imagem, ext, arquivo_para_salvar);// Salva o arquivo
-                    JOptionPane.showMessageDialog(this, "Imagem salva em: " + arquivo_para_salvar.getAbsolutePath(),
-                            "Mensagem", JOptionPane.DEFAULT_OPTION);
+                    ImageIO.write(imagem, extensao, arquivo_para_salvar);// Salva o arquivo com a imagem principal
+                    passo_a_passo_janela passo_a_passo = new passo_a_passo_janela(this, true, jPanelDesenho.sequencia);
+                    BufferedImage[] passos = passo_a_passo.passos();
+                    File diretorio = arquivo_para_salvar.getParentFile();
+                    for (int p = 1; p <= passos.length; p++) {// Cria e salva as imagens dos passos.
+                        File arquivo_passo = new File(diretorio, "passo" + p + "." + extensao);
+                        ImageIO.write(passos[p-1], extensao, arquivo_passo);
+                    }
+                    JOptionPane.showMessageDialog(this, Config.bundleMessage.getString("saveMessage"), "", JOptionPane.DEFAULT_OPTION);
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar imagem: " + ex.getMessage(),
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, Config.bundleMessage.getString("saveError") + ex.getMessage(),
+                            Config.bundleMessage.getString("errorMessageTitle"), JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (NullPointerException ex){
-            JOptionPane.showMessageDialog(this, "Erro ao salvar imagem: " + ex.getMessage(),
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Config.bundleMessage.getString("saveError") + ex.getMessage(),
+                            Config.bundleMessage.getString("errorMessageTitle"), JOptionPane.ERROR_MESSAGE);
         }        
     }//GEN-LAST:event_jMenuItemSalvarImagemActionPerformed
 
     private void jMenuItemSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSobreActionPerformed
-        Sobre janelaSobre = new Sobre(this, true);
-        janelaSobre.setLocationRelativeTo(null);
-        janelaSobre.setVisible(true);
+        String nome_do_arquivoHTML = "about/about_" + Config.locale.toString() + ".html";
+        File aboutHTML = null;
+        try {
+            aboutHTML = new File(nome_do_arquivoHTML);
+            Desktop.getDesktop().browse(aboutHTML.toURI());//Abre o arquivo html no navegador padrão do sistema
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(), Config.bundleMessage.getString("errorMessageTitle"), JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedOperationException e) {//Caso não consiga abrir o arquivo html
+            JOptionPane.showMessageDialog(rootPane, Config.bundleMessage.getString("aboutErrorBrowser"),
+                    Config.bundleMessage.getString("errorMessageTitle"), JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jMenuItemSobreActionPerformed
+
+    private void jMenuItemPrefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPrefActionPerformed
+        Preferencias pref = new Preferencias(this, true);
+        pref.setLocationRelativeTo(null);
+        pref.setVisible(true);
+        repaint();
+    }//GEN-LAST:event_jMenuItemPrefActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -246,6 +281,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenu jMenuArquivo;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItemPref;
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JMenuItem jMenuItemSalvarImagem;
     private javax.swing.JMenuItem jMenuItemSobre;

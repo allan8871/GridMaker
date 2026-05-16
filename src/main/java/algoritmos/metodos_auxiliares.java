@@ -14,11 +14,7 @@ public class metodos_auxiliares {
     }
     //Calcula a maior potência de 2 menor do que o número.
     public static int maiorPotencia2(double num){
-        int p = 2;
-        while(p <= num){
-            p *= 2;
-        }
-        return p/2;
+        return menorPotencia2(num)/2;
     }
     //Converte uma fração da forma 0<a/2^n<1 para a forma binária (será usado para o algoritmo do passo-a-passo).
     public static ArrayList<Integer> fracaoBinaria(double num){
@@ -62,14 +58,19 @@ public class metodos_auxiliares {
         String s = String.valueOf(d);
         int numerosDepoisDoPonto = s.length() - s.indexOf('.') - 1;//Número de casas decimais após o ponto.
         
-        int denominador = Math.powExact(10, numerosDepoisDoPonto);// Denominador é uma potência de 10.
+        // Denominador é uma potência de 10.
+        int denominador = 1;
+        for (int i = 0; i < numerosDepoisDoPonto; i++) {
+            denominador *= 10;
+        }
+        
         int numerador = (int) (d * denominador);
         
-        int mdc = mdc(numerador, denominador);// Simplificar
+        int mdc = mdc(numerador, denominador);// Simplificar a fração
         return (numerador / mdc) + "/" + (denominador / mdc);
     }
     // Máximo Divisor Comum
-    public static int mdc(int a, int b) {
+    private static int mdc(int a, int b) {
         while (b > 0) {
             int temp = b;
             b = a % b;

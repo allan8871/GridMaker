@@ -1,7 +1,9 @@
 package algoritmos;
 
-public class GradeInvalidaException extends Exception {
+import preferencias.Config;
+
+public class GradeInvalidaException extends IllegalArgumentException {
     public GradeInvalidaException() {
-        super("A grade não pode ser uma potência de 2.");
+        super(Config.bundleMessage.getString("invalidGridException"));
     }
 }

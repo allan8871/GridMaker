@@ -1,9 +1,12 @@
-GUI\Sobre.class
 GUI\PainelDesenho.class
 GUI\passo_a_passo_janela.class
+GUI\ColorChooserWindow.class
+preferencias\Config.class
 algoritmos\geradores_de_grade.class
 GUI\JanelaPrincipal.class
 algoritmos\GradeInvalidaException.class
 GUI\PainelPassoAPasso.class
+GUI\Preferencias.class
 principal\Main.class
 algoritmos\metodos_auxiliares.class
+preferencias\ConfigBundle.class
