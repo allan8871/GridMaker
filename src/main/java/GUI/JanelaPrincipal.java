@@ -237,7 +237,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                     BufferedImage[] passos = passo_a_passo.passos();
                     File diretorio = arquivo_para_salvar.getParentFile();
                     for (int p = 1; p <= passos.length; p++) {// Cria e salva as imagens dos passos.
-                        File arquivo_passo = new File(diretorio, "passo" + p + "." + extensao);
+                        File arquivo_passo = new File(diretorio, Config.bundleLanguage.getString("step") + p + "." + extensao);
                         ImageIO.write(passos[p-1], extensao, arquivo_passo);
                     }
                     JOptionPane.showMessageDialog(this, Config.bundleMessage.getString("saveMessage"), "", JOptionPane.DEFAULT_OPTION);
