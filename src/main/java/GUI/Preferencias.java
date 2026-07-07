@@ -141,13 +141,13 @@ public class Preferencias extends javax.swing.JDialog {
 
         jPanelConfig.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel_espessura_quadrado.setText("Espessura do quadrado:");
+        jLabel_espessura_quadrado.setText(Config.bundleLanguage.getString("windowPreference.tab.draw.squareWidth"));
 
         jSpinner_espessura_quadrado.setModel(new javax.swing.SpinnerNumberModel(1, 1, 5, 1));
         jSpinner_espessura_quadrado.setName(""); // NOI18N
         jSpinner_espessura_quadrado.addChangeListener(this::jSpinner_espessura_quadradoStateChanged);
 
-        jLabel_tamanho_fonte.setText("Tamanho da fonte:");
+        jLabel_tamanho_fonte.setText(Config.bundleLanguage.getString("windowPreference.tab.draw.fontSize"));
 
         jSpinner_fonte.setModel(new javax.swing.SpinnerNumberModel(12, 8, 30, 1));
         jSpinner_fonte.addChangeListener(this::jSpinner_fonteStateChanged);

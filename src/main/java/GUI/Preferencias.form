@@ -287,7 +287,9 @@
                       <SubComponents>
                         <Component class="javax.swing.JLabel" name="jLabel_espessura_quadrado">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Espessura do quadrado:"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="Config.bundleLanguage.getString(&quot;squareWidth&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JSpinner" name="jSpinner_espessura_quadrado">
@@ -303,7 +305,9 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel_tamanho_fonte">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Tamanho da fonte:"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="Config.bundleLanguage.getString(&quot;fontSize&quot;)" type="code"/>
+                            </Property>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JSpinner" name="jSpinner_fonte">
